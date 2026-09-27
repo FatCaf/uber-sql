@@ -5,7 +5,7 @@ CREATE TABLE district (
     surge_charge_coefficient DECIMAL(3, 2) NOT NULL DEFAULT 1.00,
     center_latitude DECIMAL(10, 8),
     center_longitude DECIMAL(11, 8),
-    area MULTIPOLYGON NULL SRID 4326,
+    area MULTIPOLYGON NOT NULL SRID 4326,
 
     CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES city (id) ON DELETE RESTRICT,
     INDEX idx_district_name (name),
