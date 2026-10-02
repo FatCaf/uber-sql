@@ -17,7 +17,7 @@ CREATE TABLE country (
     id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
     name VARCHAR(255) NOT NULL,
 
-    INDEX idx_country_name (name)
+    CONSTRAINT uq_country_name UNIQUE (name)
 );
 
 -- ----------------------------------------------------------------------------
@@ -29,6 +29,7 @@ CREATE TABLE city (
     country_id BINARY(16) NOT NULL,
 
     CONSTRAINT fk_country_id FOREIGN KEY (country_id) REFERENCES country (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_city_country_name UNIQUE (country_id, name),
     INDEX idx_city_name (name),
     INDEX idx_city_country_id (country_id)
 );
@@ -46,6 +47,7 @@ CREATE TABLE district (
     area MULTIPOLYGON NOT NULL SRID 4326,
 
     CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES city (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_district_city_name UNIQUE (city_id, name),
     INDEX idx_district_name (name),
     INDEX idx_district_city_id (city_id),
     SPATIAL INDEX idx_district_area (area)
@@ -64,9 +66,9 @@ CREATE TABLE street (
     type ENUM('street', 'avenue', 'boulevard', 'lane', 'square', 'descent', 'embankment', 'highway') NOT NULL DEFAULT 'street',
 
     CONSTRAINT fk_district_id FOREIGN KEY (district_id) REFERENCES district (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_street_district_name UNIQUE (district_id, name),
     INDEX idx_street_name (name),
-    INDEX idx_street_district_id (district_id),
-    INDEX idx_street_district_name (district_id, name)
+    INDEX idx_street_district_id (district_id)
 );
 
 -- ----------------------------------------------------------------------------
@@ -78,14 +80,12 @@ CREATE TABLE building (
     type ENUM('house', 'residential', 'industrial', 'urban', 'commercial') NOT NULL,
     number VARCHAR(50) NOT NULL,
     name VARCHAR(255),
-    latitude DECIMAL(10, 8) NOT NULL,
-    longitude DECIMAL(11, 8) NOT NULL,
     location POINT NOT NULL SRID 4326,
 
     CONSTRAINT fk_building_street FOREIGN KEY (street_id) REFERENCES street (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_building_street_number UNIQUE (street_id, number),
     INDEX idx_building_name (name),
     INDEX idx_building_number (number),
-    INDEX idx_building_street_number (street_id, number),
     SPATIAL INDEX idx_building_location (location)
 );
 
@@ -96,12 +96,11 @@ CREATE TABLE building_entrance (
     id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
     building_id BINARY(16) NOT NULL,
     label VARCHAR(100),
-    latitude DECIMAL(10, 8) NOT NULL,
-    longitude DECIMAL(11, 8) NOT NULL,
     location POINT NOT NULL SRID 4326,
 
     CONSTRAINT fk_building_entrance_building FOREIGN KEY (building_id)
         REFERENCES building (id) ON DELETE CASCADE,
+    CONSTRAINT uq_building_entrance_building_label UNIQUE (building_id, label),
     INDEX idx_building_entrance_building_id (building_id),
     INDEX idx_building_entrance_label (label),
     SPATIAL INDEX idx_building_entrance_location (location)

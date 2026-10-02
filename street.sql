@@ -8,7 +8,7 @@ CREATE TABLE street (
     type ENUM('street', 'avenue', 'boulevard', 'lane', 'square', 'descent', 'embankment', 'highway') NOT NULL DEFAULT 'street',
 
     CONSTRAINT fk_district_id FOREIGN KEY (district_id) REFERENCES district (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_street_district_name UNIQUE (district_id, name),
     INDEX idx_street_name (name),
-    INDEX idx_street_district_id (district_id),
-    INDEX idx_street_district_name (district_id, name)
+    INDEX idx_street_district_id (district_id)
 );

@@ -8,6 +8,7 @@ CREATE TABLE district (
     area MULTIPOLYGON NOT NULL SRID 4326,
 
     CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES city (id) ON DELETE RESTRICT,
+    CONSTRAINT uq_district_city_name UNIQUE (city_id, name),
     INDEX idx_district_name (name),
     INDEX idx_district_city_id (city_id),
     SPATIAL INDEX idx_district_area (area)

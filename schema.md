@@ -10,7 +10,7 @@ Brief overview of the spatial and address schema designed for taxi/dispatch syst
 - **`city`**: Cities located within a specific country (`country_id`).
 - **`district`**: Administrative and operational city districts containing spatial boundaries (`area` polygon/multipolygon), center coordinates, and dynamic surge pricing multipliers (`surge_charge_coefficient`).
 - **`street`**: Roadways and thoroughfares inside districts with traffic attributes (`is_pedestrian`, `is_mono_directional`, `is_blocked`, `type`).
-- **`building`**: Specific buildings located on streets with building classification (`type`), postal number, name, decimal coordinates, and spatial GIS point (`location`).
+- **`building`**: Specific buildings located on streets with building classification (`type`), postal number, name, and spatial GIS point (`location`).
 - **`building_entrance`**: Specific pickup/dropoff entrances and gates for a building with precise coordinates (`location`) and descriptive labels.
 
 ---
@@ -62,8 +62,6 @@ erDiagram
         enum type
         varchar number
         varchar name
-        decimal latitude
-        decimal longitude
         point location
     }
 
@@ -71,8 +69,6 @@ erDiagram
         binary id PK
         binary building_id FK
         varchar label
-        decimal latitude
-        decimal longitude
         point location
     }
 ```
