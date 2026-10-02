@@ -5,6 +5,9 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+TRUNCATE TABLE passenger_saved_place;
+TRUNCATE TABLE passenger_account;
+TRUNCATE TABLE user;
 TRUNCATE TABLE building_entrance;
 TRUNCATE TABLE building;
 TRUNCATE TABLE street;
@@ -201,7 +204,7 @@ SET @bld_hospital_id     = UUID_TO_BIN(UUID(), 1);
 SET @bld_private_house_id= UUID_TO_BIN(UUID(), 1);
 SET @bld_hydrosila_id    = UUID_TO_BIN(UUID(), 1);
 
-INSERT INTO building (id, street_id, type, number, name, latitude, longitude, location)
+INSERT INTO building (id, street_id, type, number, name, location)
 VALUES
     -- Velyka Perspektyvna
     (
@@ -210,8 +213,6 @@ VALUES
         'urban',
         '41',
         'Кропивницька міська рада',
-        48.51085000,
-        32.26590000,
         ST_SRID(POINT(48.51085000, 32.26590000), 4326)
     ),
     (
@@ -220,8 +221,6 @@ VALUES
         'commercial',
         '48',
         'ТРЦ "Depot Center"',
-        48.50942000,
-        32.26418000,
         ST_SRID(POINT(48.50942000, 32.26418000), 4326)
     ),
     (
@@ -230,8 +229,6 @@ VALUES
         'commercial',
         '50',
         'Готель "Київ"',
-        48.50889000,
-        32.26350000,
         ST_SRID(POINT(48.50889000, 32.26350000), 4326)
     ),
 
@@ -242,8 +239,6 @@ VALUES
         'urban',
         '4',
         'Театр Корифеїв ім. М. Кропивницького',
-        48.51325000,
-        32.26870000,
         ST_SRID(POINT(48.51325000, 32.26870000), 4326)
     ),
     (
@@ -252,8 +247,6 @@ VALUES
         'commercial',
         '24',
         'Кав''ярня "Дворцова" & Ресторація',
-        48.51240000,
-        32.26620000,
         ST_SRID(POINT(48.51240000, 32.26620000), 4326)
     ),
 
@@ -264,8 +257,6 @@ VALUES
         'urban',
         '1А',
         'Кафедральний собор Різдва Богородиці',
-        48.51200000,
-        32.26050000,
         ST_SRID(POINT(48.51200000, 32.26050000), 4326)
     ),
     (
@@ -274,8 +265,6 @@ VALUES
         'urban',
         '1',
         'Центральноукраїнський державний університет ім. В. Винниченка',
-        48.51460000,
-        32.26280000,
         ST_SRID(POINT(48.51460000, 32.26280000), 4326)
     ),
 
@@ -286,8 +275,6 @@ VALUES
         'urban',
         '1',
         'Залізничний вокзал "Кропивницький"',
-        48.52840000,
-        32.27410000,
         ST_SRID(POINT(48.52840000, 32.27410000), 4326)
     ),
     (
@@ -296,8 +283,6 @@ VALUES
         'residential',
         '26',
         'ЖК "Ковалівський"',
-        48.52510000,
-        32.27180000,
         ST_SRID(POINT(48.52510000, 32.27180000), 4326)
     ),
     (
@@ -306,8 +291,6 @@ VALUES
         'industrial',
         '1',
         'Завод "Ельворті" / ПАТ "Ельворті"',
-        48.52180000,
-        32.26200000,
         ST_SRID(POINT(48.52180000, 32.26200000), 4326)
     ),
 
@@ -318,8 +301,6 @@ VALUES
         'urban',
         '1',
         'Дендропарк "Кропивницький"',
-        48.51260000,
-        32.23350000,
         ST_SRID(POINT(48.51260000, 32.23350000), 4326)
     ),
     (
@@ -328,8 +309,6 @@ VALUES
         'commercial',
         '22Б',
         'ТЦ "Плазма"',
-        48.50850000,
-        32.22810000,
         ST_SRID(POINT(48.50850000, 32.22810000), 4326)
     ),
     (
@@ -338,8 +317,6 @@ VALUES
         'urban',
         '8',
         'Центральноукраїнський національний технічний університет (ЦНТУ)',
-        48.50420000,
-        32.22150000,
         ST_SRID(POINT(48.50420000, 32.22150000), 4326)
     ),
     (
@@ -348,8 +325,6 @@ VALUES
         'commercial',
         '29',
         'Гіпермаркет "Велмарт"',
-        48.50150000,
-        32.21720000,
         ST_SRID(POINT(48.50150000, 32.21720000), 4326)
     ),
 
@@ -360,8 +335,6 @@ VALUES
         'residential',
         '15к1',
         'Житловий 9-поверховий будинок',
-        48.49420000,
-        32.22680000,
         ST_SRID(POINT(48.49420000, 32.22680000), 4326)
     ),
     (
@@ -370,8 +343,6 @@ VALUES
         'residential',
         '26',
         'Житловий комплекс "Попова"',
-        48.49120000,
-        32.22310000,
         ST_SRID(POINT(48.49120000, 32.22310000), 4326)
     ),
     (
@@ -380,8 +351,6 @@ VALUES
         'residential',
         '20',
         'Багатоквартирний житловий будинок',
-        48.49050000,
-        32.21980000,
         ST_SRID(POINT(48.49050000, 32.21980000), 4326)
     ),
     (
@@ -390,8 +359,6 @@ VALUES
         'commercial',
         '23',
         'Супермаркет "АТБ-Маркет"',
-        48.48970000,
-        32.22120000,
         ST_SRID(POINT(48.48970000, 32.22120000), 4326)
     ),
 
@@ -402,8 +369,6 @@ VALUES
         'commercial',
         '12',
         'Торговий центр "Ятрань"',
-        48.50410000,
-        32.27100000,
         ST_SRID(POINT(48.50410000, 32.27100000), 4326)
     ),
     (
@@ -412,8 +377,6 @@ VALUES
         'urban',
         '56',
         'Кіровоградська обласна лікарня',
-        48.52040000,
-        32.29150000,
         ST_SRID(POINT(48.52040000, 32.29150000), 4326)
     ),
     (
@@ -422,8 +385,6 @@ VALUES
         'house',
         '78',
         'Приватний житловий будинок',
-        48.52210000,
-        32.29600000,
         ST_SRID(POINT(48.52210000, 32.29600000), 4326)
     ),
     (
@@ -432,31 +393,25 @@ VALUES
         'industrial',
         '10',
         'Завод гідроарматури "Гідросила"',
-        48.52980000,
-        32.24750000,
         ST_SRID(POINT(48.52980000, 32.24750000), 4326)
     );
 
 -- ----------------------------------------------------------------------------
 -- 6. BUILDING ENTRANCES (Pick-up / Drop-off points)
 -- ----------------------------------------------------------------------------
-INSERT INTO building_entrance (id, building_id, label, latitude, longitude, location)
+INSERT INTO building_entrance (id, building_id, label, location)
 VALUES
     -- City Hall
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_miskrada_id,
         'Головний вхід (фасад)',
-        48.51087000,
-        32.26593000,
         ST_SRID(POINT(48.51087000, 32.26593000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_miskrada_id,
         'Вхід з двору / Парковка',
-        48.51070000,
-        32.26560000,
         ST_SRID(POINT(48.51070000, 32.26560000), 4326)
     ),
 
@@ -465,16 +420,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_depot_id,
         'Центральний вхід №1 (з Перспективної)',
-        48.50945000,
-        32.26420000,
         ST_SRID(POINT(48.50945000, 32.26420000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_depot_id,
         'Вхід №2 (біля підземного паркінгу)',
-        48.50930000,
-        32.26400000,
         ST_SRID(POINT(48.50930000, 32.26400000), 4326)
     ),
 
@@ -483,16 +434,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_teatr_id,
         'Парадний вхід для глядачів',
-        48.51327000,
-        32.26873000,
         ST_SRID(POINT(48.51327000, 32.26873000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_teatr_id,
         'Службовий вхід (Акторський)',
-        48.51310000,
-        32.26840000,
         ST_SRID(POINT(48.51310000, 32.26840000), 4326)
     ),
 
@@ -501,16 +448,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_railway_st_id,
         'Центральний вестибюль / Каси',
-        48.52843000,
-        32.27415000,
         ST_SRID(POINT(48.52843000, 32.27415000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_railway_st_id,
         'Вихід до перону №1 (Зупинка таксі)',
-        48.52860000,
-        32.27440000,
         ST_SRID(POINT(48.52860000, 32.27440000), 4326)
     ),
 
@@ -519,16 +462,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_dendropark_id,
         'Головна арка (Вхід з вул. Тельнова)',
-        48.51265000,
-        32.23355000,
         ST_SRID(POINT(48.51265000, 32.23355000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_dendropark_id,
         'Західний вхід (Парковка атракціонів)',
-        48.51220000,
-        32.23150000,
         ST_SRID(POINT(48.51220000, 32.23150000), 4326)
     ),
 
@@ -537,16 +476,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_cntu_univ_id,
         'Головний корпус (Ректорат)',
-        48.50425000,
-        32.22155000,
         ST_SRID(POINT(48.50425000, 32.22155000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_cntu_univ_id,
         'Спорткомплекс / Гуртожитки',
-        48.50380000,
-        32.22080000,
         ST_SRID(POINT(48.50380000, 32.22080000), 4326)
     ),
 
@@ -555,32 +490,24 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_popova_15_id,
         'Під''їзд 1 (кв. 1-36)',
-        48.49421000,
-        32.22670000,
         ST_SRID(POINT(48.49421000, 32.22670000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_popova_15_id,
         'Під''їзд 2 (кв. 37-72)',
-        48.49423000,
-        32.22680000,
         ST_SRID(POINT(48.49423000, 32.22680000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_popova_15_id,
         'Під''їзд 3 (кв. 73-108)',
-        48.49425000,
-        32.22690000,
         ST_SRID(POINT(48.49425000, 32.22690000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_popova_15_id,
         'Під''їзд 4 (кв. 109-144)',
-        48.49427000,
-        32.22700000,
         ST_SRID(POINT(48.49427000, 32.22700000), 4326)
     ),
 
@@ -589,24 +516,18 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_zhadova_20_id,
         'Під''їзд 1',
-        48.49052000,
-        32.21975000,
         ST_SRID(POINT(48.49052000, 32.21975000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_zhadova_20_id,
         'Під''їзд 2',
-        48.49054000,
-        32.21985000,
         ST_SRID(POINT(48.49054000, 32.21985000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_zhadova_20_id,
         'Під''їзд 3',
-        48.49056000,
-        32.21995000,
         ST_SRID(POINT(48.49056000, 32.21995000), 4326)
     ),
 
@@ -615,16 +536,12 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_hospital_id,
         'Приймальне відділення (Невідкладна допомога / Швидка)',
-        48.52045000,
-        32.29155000,
         ST_SRID(POINT(48.52045000, 32.29155000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_hospital_id,
         'Центральний вхід / Поліклініка',
-        48.52035000,
-        32.29120000,
         ST_SRID(POINT(48.52035000, 32.29120000), 4326)
     ),
 
@@ -633,15 +550,59 @@ VALUES
         UUID_TO_BIN(UUID(), 1),
         @bld_zhadova_atb_id,
         'Головний вхід для покупців',
-        48.48972000,
-        32.22123000,
         ST_SRID(POINT(48.48972000, 32.22123000), 4326)
     ),
     (
         UUID_TO_BIN(UUID(), 1),
         @bld_zhadova_atb_id,
         'Рампа розвантаження товару',
-        48.48960000,
-        32.22100000,
         ST_SRID(POINT(48.48960000, 32.22100000), 4326)
     );
+
+SET @usr_olena_id         = UUID_TO_BIN(UUID(), 1);
+SET @usr_andrii_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_iryna_id         = UUID_TO_BIN(UUID(), 1);
+SET @usr_maksym_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_dmytro_old_id    = UUID_TO_BIN(UUID(), 1);
+SET @usr_dmytro_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_svitlana_id      = UUID_TO_BIN(UUID(), 1);
+
+INSERT INTO user (id, first_name, last_name, phone, email, is_phone_verified, is_email_verified, date_of_birth, avatar_url, locale, status, deleted_at)
+VALUES
+    (@usr_olena_id,      'Олена',    'Коваленко', '+380501234567', 'olena.kovalenko@gmail.com', TRUE,  TRUE,  '1992-04-15', 'https://cdn.example.com/avatars/olena.jpg', 'uk', 'active',  NULL),
+    (@usr_andrii_id,     'Андрій',   'Шевчук',    '+380672345678', 'andrii.shevchuk@ukr.net',   TRUE,  FALSE, '1988-11-02', NULL,                                        'uk', 'active',  NULL),
+    (@usr_iryna_id,      'Ірина',    'Бондар',    '+380933456789', NULL,                        TRUE,  FALSE, '1975-06-21', NULL,                                        'uk', 'active',  NULL),
+    (@usr_maksym_id,     'Максим',   'Мельник',   '+380504567890', 'max.melnyk@gmail.com',      TRUE,  TRUE,  '2001-01-30', NULL,                                        'uk', 'blocked', NULL),
+    (@usr_dmytro_old_id, 'Дмитро',   'Ткаченко',  '+380665678901', 'd.tkachenko@gmail.com',     TRUE,  TRUE,  '1995-09-09', NULL,                                        'uk', 'active',  '2026-08-14 10:22:00'),
+    (@usr_dmytro_id,     'Дмитро',   'Ткаченко',  '+380665678901', 'd.tkachenko@gmail.com',     TRUE,  FALSE, '1995-09-09', NULL,                                        'uk', 'active',  NULL),
+    (@usr_svitlana_id,   'Світлана', NULL,        '+380976789012', 'svitlana.k@outlook.com',    FALSE, FALSE, NULL,         NULL,                                        'en', 'active',  NULL);
+
+SET @pa_olena_id      = UUID_TO_BIN(UUID(), 1);
+SET @pa_andrii_id     = UUID_TO_BIN(UUID(), 1);
+SET @pa_iryna_id      = UUID_TO_BIN(UUID(), 1);
+SET @pa_maksym_id     = UUID_TO_BIN(UUID(), 1);
+SET @pa_dmytro_old_id = UUID_TO_BIN(UUID(), 1);
+SET @pa_dmytro_id     = UUID_TO_BIN(UUID(), 1);
+
+INSERT INTO passenger_account (id, user_id, rating, completed_rides_count, cancelled_rides_count, preferred_payment_method)
+VALUES
+    (@pa_olena_id,      @usr_olena_id,      4.92, 148, 3,  'card'),
+    (@pa_andrii_id,     @usr_andrii_id,     4.75, 62,  5,  'cash'),
+    (@pa_iryna_id,      @usr_iryna_id,      5.00, 17,  0,  'cash'),
+    (@pa_maksym_id,     @usr_maksym_id,     3.10, 41,  19, 'card'),
+    (@pa_dmytro_old_id, @usr_dmytro_old_id, 4.60, 33,  2,  'card'),
+    (@pa_dmytro_id,     @usr_dmytro_id,     5.00, 2,   0,  'card');
+
+INSERT INTO passenger_saved_place (passenger_account_id, building_id, building_entrance_id, label)
+VALUES
+    (@pa_olena_id,  @bld_popova_15_id,     (SELECT id FROM building_entrance WHERE building_id = @bld_popova_15_id AND label = 'Під''їзд 2 (кв. 37-72)'), 'Дім'),
+    (@pa_olena_id,  @bld_cdu_univ_id,      NULL,                                                                                                       'Робота'),
+    (@pa_olena_id,  @bld_plazma_mall_id,   NULL,                                                                                                       'Спортзал'),
+    (@pa_andrii_id, @bld_zhadova_20_id,    (SELECT id FROM building_entrance WHERE building_id = @bld_zhadova_20_id AND label = 'Під''їзд 3'),            'Дім'),
+    (@pa_andrii_id, @bld_hydrosila_id,     NULL,                                                                                                       'Робота'),
+    (@pa_andrii_id, @bld_railway_st_id,    (SELECT id FROM building_entrance WHERE building_id = @bld_railway_st_id AND label = 'Вихід до перону №1 (Зупинка таксі)'), 'Вокзал'),
+    (@pa_iryna_id,  @bld_private_house_id, NULL,                                                                                                       'Дім'),
+    (@pa_iryna_id,  @bld_hospital_id,      (SELECT id FROM building_entrance WHERE building_id = @bld_hospital_id AND label = 'Центральний вхід / Поліклініка'), 'Лікарня'),
+    (@pa_maksym_id, @bld_kovalivka_res_id, NULL,                                                                                                       'Дім'),
+    (@pa_dmytro_id, @bld_popova_26_id,     NULL,                                                                                                       'Дім'),
+    (@pa_dmytro_id, @bld_cntu_univ_id,     (SELECT id FROM building_entrance WHERE building_id = @bld_cntu_univ_id AND label = 'Головний корпус (Ректорат)'), 'Університет');
