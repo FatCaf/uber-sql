@@ -5,6 +5,9 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+TRUNCATE TABLE passenger_saved_place;
+TRUNCATE TABLE passenger_account;
+TRUNCATE TABLE user;
 TRUNCATE TABLE building_entrance;
 TRUNCATE TABLE building;
 TRUNCATE TABLE street;
@@ -555,3 +558,51 @@ VALUES
         'Рампа розвантаження товару',
         ST_SRID(POINT(48.48960000, 32.22100000), 4326)
     );
+
+SET @usr_olena_id         = UUID_TO_BIN(UUID(), 1);
+SET @usr_andrii_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_iryna_id         = UUID_TO_BIN(UUID(), 1);
+SET @usr_maksym_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_dmytro_old_id    = UUID_TO_BIN(UUID(), 1);
+SET @usr_dmytro_id        = UUID_TO_BIN(UUID(), 1);
+SET @usr_svitlana_id      = UUID_TO_BIN(UUID(), 1);
+
+INSERT INTO user (id, first_name, last_name, phone, email, is_phone_verified, is_email_verified, date_of_birth, avatar_url, locale, status, deleted_at)
+VALUES
+    (@usr_olena_id,      'Олена',    'Коваленко', '+380501234567', 'olena.kovalenko@gmail.com', TRUE,  TRUE,  '1992-04-15', 'https://cdn.example.com/avatars/olena.jpg', 'uk', 'active',  NULL),
+    (@usr_andrii_id,     'Андрій',   'Шевчук',    '+380672345678', 'andrii.shevchuk@ukr.net',   TRUE,  FALSE, '1988-11-02', NULL,                                        'uk', 'active',  NULL),
+    (@usr_iryna_id,      'Ірина',    'Бондар',    '+380933456789', NULL,                        TRUE,  FALSE, '1975-06-21', NULL,                                        'uk', 'active',  NULL),
+    (@usr_maksym_id,     'Максим',   'Мельник',   '+380504567890', 'max.melnyk@gmail.com',      TRUE,  TRUE,  '2001-01-30', NULL,                                        'uk', 'blocked', NULL),
+    (@usr_dmytro_old_id, 'Дмитро',   'Ткаченко',  '+380665678901', 'd.tkachenko@gmail.com',     TRUE,  TRUE,  '1995-09-09', NULL,                                        'uk', 'active',  '2026-08-14 10:22:00'),
+    (@usr_dmytro_id,     'Дмитро',   'Ткаченко',  '+380665678901', 'd.tkachenko@gmail.com',     TRUE,  FALSE, '1995-09-09', NULL,                                        'uk', 'active',  NULL),
+    (@usr_svitlana_id,   'Світлана', NULL,        '+380976789012', 'svitlana.k@outlook.com',    FALSE, FALSE, NULL,         NULL,                                        'en', 'active',  NULL);
+
+SET @pa_olena_id      = UUID_TO_BIN(UUID(), 1);
+SET @pa_andrii_id     = UUID_TO_BIN(UUID(), 1);
+SET @pa_iryna_id      = UUID_TO_BIN(UUID(), 1);
+SET @pa_maksym_id     = UUID_TO_BIN(UUID(), 1);
+SET @pa_dmytro_old_id = UUID_TO_BIN(UUID(), 1);
+SET @pa_dmytro_id     = UUID_TO_BIN(UUID(), 1);
+
+INSERT INTO passenger_account (id, user_id, rating, completed_rides_count, cancelled_rides_count, preferred_payment_method)
+VALUES
+    (@pa_olena_id,      @usr_olena_id,      4.92, 148, 3,  'card'),
+    (@pa_andrii_id,     @usr_andrii_id,     4.75, 62,  5,  'cash'),
+    (@pa_iryna_id,      @usr_iryna_id,      5.00, 17,  0,  'cash'),
+    (@pa_maksym_id,     @usr_maksym_id,     3.10, 41,  19, 'card'),
+    (@pa_dmytro_old_id, @usr_dmytro_old_id, 4.60, 33,  2,  'card'),
+    (@pa_dmytro_id,     @usr_dmytro_id,     5.00, 2,   0,  'card');
+
+INSERT INTO passenger_saved_place (passenger_account_id, building_id, building_entrance_id, label)
+VALUES
+    (@pa_olena_id,  @bld_popova_15_id,     (SELECT id FROM building_entrance WHERE building_id = @bld_popova_15_id AND label = 'Під''їзд 2 (кв. 37-72)'), 'Дім'),
+    (@pa_olena_id,  @bld_cdu_univ_id,      NULL,                                                                                                       'Робота'),
+    (@pa_olena_id,  @bld_plazma_mall_id,   NULL,                                                                                                       'Спортзал'),
+    (@pa_andrii_id, @bld_zhadova_20_id,    (SELECT id FROM building_entrance WHERE building_id = @bld_zhadova_20_id AND label = 'Під''їзд 3'),            'Дім'),
+    (@pa_andrii_id, @bld_hydrosila_id,     NULL,                                                                                                       'Робота'),
+    (@pa_andrii_id, @bld_railway_st_id,    (SELECT id FROM building_entrance WHERE building_id = @bld_railway_st_id AND label = 'Вихід до перону №1 (Зупинка таксі)'), 'Вокзал'),
+    (@pa_iryna_id,  @bld_private_house_id, NULL,                                                                                                       'Дім'),
+    (@pa_iryna_id,  @bld_hospital_id,      (SELECT id FROM building_entrance WHERE building_id = @bld_hospital_id AND label = 'Центральний вхід / Поліклініка'), 'Лікарня'),
+    (@pa_maksym_id, @bld_kovalivka_res_id, NULL,                                                                                                       'Дім'),
+    (@pa_dmytro_id, @bld_popova_26_id,     NULL,                                                                                                       'Дім'),
+    (@pa_dmytro_id, @bld_cntu_univ_id,     (SELECT id FROM building_entrance WHERE building_id = @bld_cntu_univ_id AND label = 'Головний корпус (Ректорат)'), 'Університет');

@@ -6,12 +6,12 @@
 DROP TABLE IF EXISTS passenger_saved_place;
 DROP TABLE IF EXISTS passenger_account;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS country;
-DROP TABLE IF EXISTS city;
-DROP TABLE IF EXISTS district;
-DROP TABLE IF EXISTS street;
-DROP TABLE IF EXISTS building;
 DROP TABLE IF EXISTS building_entrance;
+DROP TABLE IF EXISTS building;
+DROP TABLE IF EXISTS street;
+DROP TABLE IF EXISTS district;
+DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS country;
 
 -- ----------------------------------------------------------------------------
 -- 1. COUNTRY
