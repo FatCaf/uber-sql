@@ -3,6 +3,9 @@
 -- Sequentially structured to satisfy all foreign key dependency constraints.
 -- ============================================================================
 
+DROP TABLE IF EXISTS passenger_saved_place;
+DROP TABLE IF EXISTS passenger_account;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS country;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS district;
@@ -104,4 +107,65 @@ CREATE TABLE building_entrance (
     INDEX idx_building_entrance_building_id (building_id),
     INDEX idx_building_entrance_label (label),
     SPATIAL INDEX idx_building_entrance_location (location)
+);
+
+CREATE TABLE user (
+    id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100),
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(255),
+    is_phone_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    is_email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    date_of_birth DATE,
+    avatar_url VARCHAR(2048),
+    locale VARCHAR(10) NOT NULL DEFAULT 'uk',
+    status ENUM('active', 'blocked') NOT NULL DEFAULT 'active',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+    UNIQUE INDEX uq_user_phone_not_deleted ((IF(deleted_at IS NULL, phone, NULL))),
+    UNIQUE INDEX uq_user_email_not_deleted ((IF(deleted_at IS NULL, email, NULL))),
+    INDEX idx_user_phone (phone),
+    INDEX idx_user_email (email),
+    CONSTRAINT chk_user_phone_e164 CHECK (phone REGEXP '^[+][1-9][0-9]{7,14}$'),
+    FULLTEXT INDEX ft_user_name (first_name, last_name),
+    INDEX idx_user_status (status)
+);
+
+CREATE TABLE passenger_account (
+    id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+    user_id BINARY(16) NOT NULL,
+    rating DECIMAL(3, 2) NOT NULL DEFAULT 5.00,
+    completed_rides_count INT UNSIGNED NOT NULL DEFAULT 0,
+    cancelled_rides_count INT UNSIGNED NOT NULL DEFAULT 0,
+    preferred_payment_method ENUM('cash', 'card') NOT NULL DEFAULT 'cash',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_passenger_account_user FOREIGN KEY (user_id)
+        REFERENCES user (id) ON DELETE CASCADE,
+    CONSTRAINT uq_passenger_account_user_id UNIQUE (user_id),
+    CONSTRAINT chk_passenger_account_rating CHECK (rating BETWEEN 1.00 AND 5.00)
+);
+
+CREATE TABLE passenger_saved_place (
+    id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
+    passenger_account_id BINARY(16) NOT NULL,
+    building_id BINARY(16) NOT NULL,
+    building_entrance_id BINARY(16),
+    label VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_passenger_saved_place_passenger FOREIGN KEY (passenger_account_id)
+        REFERENCES passenger_account (id) ON DELETE CASCADE,
+    CONSTRAINT fk_passenger_saved_place_building FOREIGN KEY (building_id)
+        REFERENCES building (id) ON DELETE CASCADE,
+    CONSTRAINT fk_passenger_saved_place_entrance FOREIGN KEY (building_entrance_id)
+        REFERENCES building_entrance (id) ON DELETE SET NULL,
+    CONSTRAINT uq_passenger_saved_place_passenger_label UNIQUE (passenger_account_id, label),
+    INDEX idx_passenger_saved_place_building_id (building_id),
+    INDEX idx_passenger_saved_place_entrance_id (building_entrance_id)
 );
