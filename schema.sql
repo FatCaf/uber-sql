@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS building_entrance;
 CREATE TABLE country (
     id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
     name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT uq_country_name UNIQUE (name)
 );
@@ -30,6 +32,8 @@ CREATE TABLE city (
     id BINARY(16) PRIMARY KEY NOT NULL DEFAULT (UUID_TO_BIN(UUID(), 1)),
     name VARCHAR(255) NOT NULL,
     country_id BINARY(16) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_country_id FOREIGN KEY (country_id) REFERENCES country (id) ON DELETE RESTRICT,
     CONSTRAINT uq_city_country_name UNIQUE (country_id, name),
@@ -48,6 +52,8 @@ CREATE TABLE district (
     center_latitude DECIMAL(10, 8),
     center_longitude DECIMAL(11, 8),
     area MULTIPOLYGON NOT NULL SRID 4326,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_city_id FOREIGN KEY (city_id) REFERENCES city (id) ON DELETE RESTRICT,
     CONSTRAINT uq_district_city_name UNIQUE (city_id, name),
@@ -67,6 +73,8 @@ CREATE TABLE street (
     is_mono_directional BOOLEAN NOT NULL DEFAULT FALSE,
     is_blocked BOOLEAN NOT NULL DEFAULT FALSE,
     type ENUM('street', 'avenue', 'boulevard', 'lane', 'square', 'descent', 'embankment', 'highway') NOT NULL DEFAULT 'street',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_district_id FOREIGN KEY (district_id) REFERENCES district (id) ON DELETE RESTRICT,
     CONSTRAINT uq_street_district_name UNIQUE (district_id, name),
@@ -84,6 +92,8 @@ CREATE TABLE building (
     number VARCHAR(50) NOT NULL,
     name VARCHAR(255),
     location POINT NOT NULL SRID 4326,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_building_street FOREIGN KEY (street_id) REFERENCES street (id) ON DELETE RESTRICT,
     CONSTRAINT uq_building_street_number UNIQUE (street_id, number),
@@ -100,6 +110,8 @@ CREATE TABLE building_entrance (
     building_id BINARY(16) NOT NULL,
     label VARCHAR(100),
     location POINT NOT NULL SRID 4326,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_building_entrance_building FOREIGN KEY (building_id)
         REFERENCES building (id) ON DELETE CASCADE,

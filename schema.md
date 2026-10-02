@@ -35,12 +35,16 @@ erDiagram
     country {
         binary id PK
         varchar name
+        timestamp created_at
+        timestamp updated_at
     }
 
     city {
         binary id PK
         varchar name
         binary country_id FK
+        timestamp created_at
+        timestamp updated_at
     }
 
     district {
@@ -51,6 +55,8 @@ erDiagram
         decimal center_latitude
         decimal center_longitude
         multipolygon area
+        timestamp created_at
+        timestamp updated_at
     }
 
     street {
@@ -61,6 +67,8 @@ erDiagram
         boolean is_mono_directional
         boolean is_blocked
         enum type
+        timestamp created_at
+        timestamp updated_at
     }
 
     building {
@@ -70,6 +78,8 @@ erDiagram
         varchar number
         varchar name
         point location
+        timestamp created_at
+        timestamp updated_at
     }
 
     building_entrance {
@@ -77,6 +87,8 @@ erDiagram
         binary building_id FK
         varchar label
         point location
+        timestamp created_at
+        timestamp updated_at
     }
 
     user {

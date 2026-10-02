@@ -3,6 +3,8 @@ CREATE TABLE building_entrance (
     building_id BINARY(16) NOT NULL,
     label VARCHAR(100),
     location POINT NOT NULL SRID 4326,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_building_entrance_building FOREIGN KEY (building_id)
         REFERENCES building (id) ON DELETE CASCADE,

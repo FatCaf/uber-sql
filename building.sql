@@ -5,6 +5,8 @@ CREATE TABLE building (
     number VARCHAR(50) NOT NULL,
     name VARCHAR(255),
     location POINT NOT NULL SRID 4326,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_building_street FOREIGN KEY (street_id) REFERENCES street (id) ON DELETE RESTRICT,
     CONSTRAINT uq_building_street_number UNIQUE (street_id, number),
